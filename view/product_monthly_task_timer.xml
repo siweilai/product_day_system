@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!--产品月结 -->
+    <record model="ir.cron" id="do_run_compute_product_monthly_task">
+      <field name='name'>产品月结</field>
+      <field name='interval_number'>1</field>
+      <field name='interval_type'>months</field>
+      <field name="numbercall">-1</field>
+      <field name="active">True</field>
+      <field name="doall" eval="False"/>
+      <field name="model">product.monthly</field>
+      <field name="function">do_run_compute_product_monthly_task</field>
+      <field name="args">(1,)</field>
+    </record>
+  </data>
+</openerp>

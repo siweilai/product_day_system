@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="odoo8_monthly_system_product_product_form_inherit">
+            <field name="name">product.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="odoo8_model.view_form_odoo8_product_product_customer"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_stat_button"
+                            string="生成月结"
+                            name="but_monthly_product"
+                            type="object"
+                            icon="fa-building-o"
+                            ></button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

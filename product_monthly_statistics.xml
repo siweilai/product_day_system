@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_product_monthly_statistics_form" model="ir.ui.view">
+            <field name="name">product.monthly.statistics.form</field>
+            <field name="model">product.monthly.statistics</field>
+            <field name="arch" type="xml">
+                <form string="月结产品">
+                    <header>
+                        <button name="action_draft" states="done" string="重置为草稿" type="object"/>
+                        <button name="action_done" states="draft" string="审核" type="object"/>
+                        <field name="state" widget="statusbar" nolabel="1"/>
+                    </header>
+                    <field name="image" widget='image' class="oe_left oe_avatar"
+                           options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id" required='1' readonly='1'/>
+                            <field name="uom_id"/>
+                        </h1>
+                    </div>
+                    <div class="oe_right oe_button_box" name="buttons">
+
+                        <button name="but_inventory_month_qty" type="object" class="oe_highlight" string="本月结存"/>
+                        <button name="but_discount_inventory_month_qty_price_unit" type="object" class="oe_highlight" string="本月折扣"/>
+
+                    </div>
+
+                    <group>
+
+                        <group>
+                            <field name="company_id" readonly='1'/>
+                            <field name="warehouse_id" readonly='1'/>
+                        </group>
+                        <group>
+                            <field name="name" readonly='1'/>
+                            <field name="monthly_id" readonly='1'/>
+                        </group>
+                    </group>
+
+
+                    <group>
+
+
+                        <group string="入库">
+                            <label for="purchase_month_in_qty"/>
+                            <div>
+                                <field name="purchase_month_in_qty" style="width: 30%%"/>
+                                <field name="purchase_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_purchase_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'采购入库'}" string="查看数据"/>
+                            </div>
+
+                            <label for="purchase_sample_month_in_qty"/>
+                            <div>
+                                <field name="purchase_sample_month_in_qty" style="width: 30%%"/>
+                                <field name="purchase_sample_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_purchase_sample_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'采购样品入库'}" string="查看数据"/>
+                            </div>
+
+                            <label for="sale_month_in_qty"/>
+                            <div>
+                                <field name="sale_month_in_qty" style="width: 30%%"/>
+                                <field name="sale_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_sale_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'销售退货'}" string="查看数据"/>
+                            </div>
+
+                            <label for="sale_sample_month_in_qty"/>
+                            <div>
+                                <field name="sale_sample_month_in_qty" style="width: 30%%"/>
+                                <field name="sale_sample_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_sale_sample_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'销售样品退货'}" string="查看数据"/>
+                            </div>
+
+                            <label for="stock_allocation_month_in_qty"/>
+                            <div>
+                                <field name="stock_allocation_month_in_qty" style="width: 30%%"/>
+                                <field name="stock_allocation_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_stock_allocation_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'仓库调拨'}" string="查看数据"/>
+                            </div>
+
+                            <label for="overage_month_in_qty"/>
+                            <div>
+                                <field name="overage_month_in_qty" style="width: 30%%"/>
+                                <field name="overage_month_in_amount" style="width: 30%%"/>
+
+                                <button name="but_overage_month_in_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'盘点'}" string="查看数据"/>
+                            </div>
+                        </group>
+                        <group string="出库">
+
+                            <label for="purchase_month_out_qty"/>
+                            <div>
+                                <field name="purchase_month_out_qty" style="width: 30%%"/>
+                                <field name="purchase_month_out_amount" style="width: 30%%"/>
+
+                                <button name="but_purchase_month_out_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'采购退货'}" string="查看数据"/>
+                            </div>
+
+                            <label for="purchase_sample_month_out_qty"/>
+                            <div>
+                                <field name="purchase_sample_month_out_qty" style="width: 30%%"/>
+                                <field name="purchase_sample_month_out_amount" style="width: 30%%"/>
+
+                                <button name="but_purchase_sample_month_out_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'采购样品退货'}" string="查看数据"/>
+                            </div>
+
+                            <label for="sale_month_out_qty"/>
+                            <div>
+                                <field name="sale_month_out_qty" style="width: 30%%"/>
+                                <field name="sale_month_out_amount" style="width: 30%%"/>
+
+                                <button name="but_sale_month_out_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'销售出库'}" string="查看数据"/>
+                            </div>
+
+                            <label for="sale_sample_month_out_qty"/>
+                            <div>
+                                <field name="sale_sample_month_out_qty" style="width: 30%%"/>
+                                <field name="sale_sample_month_out_amount" style="width: 30%%"/>
+
+                                <button name="but_sale_sample_month_out_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'销售样品出库'}" string="查看数据"/>
+                            </div>
+
+
+                            <label for="stock_allocation_month_out_qty"/>
+                            <div>
+                                <field name="stock_allocation_month_out_qty" style="width: 30%%"/>
+                                <field name="stock_allocation_month_out_amount" style="width: 30%%"/>
+
+                                <button name="but_stock_allocation_month_out_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'仓库调拨'}" string="查看数据"/>
+                            </div>
+
+                            <label for="loss_month_qty"/>
+                            <div>
+                                <field name="loss_month_qty" style="width: 30%%"/>
+                                <field name="loss_month_amount" style="width: 30%%"/>
+
+                                <button name="but_loss_month_qty" style="width: 19%%" type="object"
+                                        class="oe_highlight"
+                                        string="计算"/>
+                                <button name="but_show_monthly" style="width: 19%%" type="object" class="oe_highlight"
+                                        context="{'initial':'盘点'}" string="查看数据"/>
+                            </div>
+
+                        </group>
+
+                        <group string="上月结存">
+                            <field name="last_month_qty"/>
+                            <field name="last_month_amount"/>
+                            <field name="last_month_qty_price_unit"/>
+                        </group>
+                        <group string="本月结存">
+
+                            <field name="inventory_month_qty"/>
+                            <field name="inventory_month_amount"/>
+                            <field name="inventory_month_qty_price_unit"/>
+                            <field name="price_changes" help="如果公司要调整加权平均价可以月未进行人工调整"/>
+                        </group>
+
+                        <group string="上月折扣">
+                            <field name="discount_last_month_qty"/>
+                            <field name="discount_last_month_amount"/>
+                            <field name="discount_last_month_qty_price_unit"/>
+                        </group>
+                        <group string="本月折扣">
+
+                            <field name="discount_inventory_month_qty"/>
+                            <field name="discount_inventory_month_amount"/>
+                            <field name="discount_inventory_month_qty_price_unit"/>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="产品月结成本（天）">
+                            <field name="statistics_line" readonly="1">
+                                <tree string="产品月结成本（天）" editable="bottom">
+                                    <field name="sequence" string="序号"/>
+                                    <field name="product_id" string="产品"/>
+                                    <field name="monthly_date" string="月结时间"/>
+                                    <field name="discount_last_day_qty_price_unit" string="昨天加权平均"/>
+                                    <field name="discount_today_qty_price_unit" string="当天加权平均"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        <record id="view_product_monthly_statistics_tree" model="ir.ui.view">
+            <field name="name">product.monthly.statistics.tree</field>
+            <field name="model">product.monthly.statistics</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';gray:state == 'done' " string="期间">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="monthly_id"/>
+                    <field name="product_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_product_monthly_statistics_search" model="ir.ui.view">
+            <field name="name">product.monthly.statistics.search</field>
+            <field name="model">product.monthly.statistics</field>
+            <field name="arch" type="xml">
+                <search string="查询">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('product_id','ilike',self)]"
+                           string="Period"/>
+                    <field name="company_id"/>
+                    <separator/>
+                    <separator/>
+                    <filter string="新消息" name="message_unread" domain="[('message_unread','=',True)]"/>
+                    <group expand="0" string="分组">
+                        <filter string="产品" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="公司" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="月份" domain="[]" context="{'group_by':'monthly_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_product_monthly_statistics" model="ir.actions.act_window">
+            <field name="name">月结产品</field>
+            <field name="res_model">product.monthly.statistics</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    创建产品月结
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem name="月结产品" id="menu_action_product_monthly_statistics"
+                  parent="odoo8_monthly_system.prod_config_monthly"
+                  action="action_product_monthly_statistics" sequence="11"/>
+
+
+        <record id="view_tree_odoo8_monthly_system" model="ir.ui.view">
+            <field name="name">月结明细</field>
+            <field name="model">stock.move</field>
+
+            <field name="arch" type="xml">
+                <tree string="明细" create="false" copy="false" write="false" unlink="false">
+                    <field name="date" widget="date" string="日期"/>
+                    <field name="partner_id" string="业务伙伴"/>
+                    <field name="picking_id" string="Reference" invisible="1"/>
+                    <field name="origin"/>
+                    <field name="product_id"/>
+                    <field name="product_uom_qty" sum=""/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal" sum=""/>
+                    <field name="product_uom" string="单位"/>
+                    <field name="initial"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_search_actions_monthly_system" model="ir.ui.view">
+            <field name="name">stock.move.internal.search</field>
+            <field name="model">stock.move</field>
+            <field eval="0" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="月结产品">
+                    <field name="name" string="Picking List"
+                           filter_domain="['|',('product_id','ilike', self),('origin','ilike',self)]"/>
+                    <separator/>
+                    <field name="partner_id" string="客户" filter_domain="[('partner_id','child_of',self)]"/>
+                    <field name="product_id"/>
+                    <group expand="0" string="分组">
+                        <filter string="状态" icon="terp-stock_effects-object-colorize" domain="[]"
+                                context="{'group_by':'state'}"/>
+                        <filter string="单号" domain="[]" context="{'group_by':'origin'}"/>
+                        <filter string="数据类型" domain="[]" context="{'group_by':'initial'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_tree_actions_monthly_system" model="ir.actions.act_window">
+            <field name="name">月结明细</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_tree_odoo8_monthly_system"/>
+            <field name="search_view_id" ref="view_search_actions_monthly_system"/>
+            <!--<field name="domain">[('state','=','done')]</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    月结明细
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

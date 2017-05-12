@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <function name="install_stock_picking_type" model="stock.picking.type" eval="([],{'lang': 'zh_TW'})"/>
+
+
+    </data>
+</openerp>

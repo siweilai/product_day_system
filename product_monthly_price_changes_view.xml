@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_form_product_monthly_price_changes" model="ir.ui.view">
+            <field name="name">product.monthly.price.changes.form</field>
+            <field name="model">product.monthly.price.changes</field>
+            <field name="arch" type="xml">
+                <form string="窗体名称" version="7.0">
+                   <header>
+                       <button name="but_review" string="提交审核" states="draft" type="object" class="oe_highlight"/>
+                       <button name="but_done" string="审核" states="review" type="object" class="oe_highlight"/>
+                       <button name="but_cancel" string="取消" states="done" type="object" class="oe_highlight"/>
+                       <button name="but_draft" string="重置为草稿" states="cancel,review" type="object"
+                               class="oe_highlight"/>
+                       <field name="state" widget="statusbar" statusbar_visible="draft,review,done,close" class="oe_right"/>
+
+                   </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"  widget="selection" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="monthly_id"  widget="selection" domain="[('fiscalyear_id','=',name)]" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="product_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="price_changes" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_product_monthly_price_changes" model="ir.ui.view">
+            <field name="name">product.monthly.price.changes.tree</field>
+            <field name="model">product.monthly.price.changes</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="monthly_id"/>
+                    <field name="product_id"/>
+                    <field name="price_changes"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_search_product_monthly_price_changes" model="ir.ui.view">
+            <field name="name">product.monthly.price.changes.search</field>
+            <field name="model">product.monthly.price.changes</field>
+            <field name="arch" type="xml">
+                <search string="查询">
+                    <field name="name" string="单据"
+                           filter_domain="['|',('price_changes','ilike',self),('product_id','ilike',self)]"/>
+                    <field name="product_id"/>
+                    <separator/>
+                    <separator/>
+                    <group expand="0" string="分组">
+                        <filter string="年份" domain="[]" context="{'group_by':'name'}"/>
+                        <filter string="月份" domain="[]" context="{'group_by':'monthly_id'}"/>
+                        <filter string="产品" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!--  窗体事件 查询  Search  graph,gantt-->
+        <record id="action_product_monthly_price_changes" model="ir.actions.act_window">
+            <field name="name">月平均价格调整</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.monthly.price.changes</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_tree_product_monthly_price_changes"/>
+            <field name="search_view_id" ref="view_search_product_monthly_price_changes"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    创建月平均价格调整
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="月平均价格调整" id="menu_action_product_monthly_price_changes"
+                  parent="odoo8_monthly_system.prod_config_monthly"
+                  action="action_product_monthly_price_changes" sequence="12"/>
+
+    </data>
+</openerp>

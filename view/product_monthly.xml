@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem id="prod_config_monthly" name="产品月结" parent="account.menu_finance" sequence="70"
+                  groups="base.group_no_one"/>
+
+
+        <record id="view_product_monthly_form" model="ir.ui.view">
+            <field name="name">product.monthly.form</field>
+            <field name="model">product.monthly</field>
+            <field name="arch" type="xml">
+                <form string="年度">
+                    <header>
+                        <button name="create_period" states="draft" string="创建月度客户回收期间" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_draft" states="done" string="重置为草稿" type="object"/>
+                        <button name="bnt_done" states="draft" string="审核" type="object"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"
+                               statusbar_colors='{"done":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_right oe_button_box" name="buttons">
+
+                            <button class="oe_stat_button"
+                                    name="all_product"
+                                    icon="fa-building-o" string="第一步 生成本年度产品"
+                                    type="object" attrs="{'invisible':[('state', '=', 'done')]}"
+                                    >
+                            </button>
+                             <button class="oe_stat_button"
+                                    name="product_amount_total"
+                                    type='object'
+                                    icon="fa-building-o" string="第二步 计算产品金额"
+                                    >
+                            </button>
+                            <button class="oe_stat_button"
+                                    name="year_product_average"
+                                    icon="fa-building-o" string="第三步 计算月一次加权平均"
+                                    type="object" attrs="{'invisible':[('state', '=', 'done')]}"
+                                    >
+                            </button>
+
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="例:2015"/>
+                                <field name="company_id"/>
+                                <field name="pool_id" required='1'/>
+
+                            </group>
+                            <group>
+                                <field name="date_start"/>
+                                <field name="date_stop"/>
+                            </group>
+                        </group>
+                        <field colspan="4" name="period_ids" nolabel="1" widget="one2many_list">
+                            <form string="期间">
+                                <group col="4">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="date_start"/>
+                                    <field name="date_stop"/>
+                                    <field name="special"/>
+                                    <field name="state" invisible="1"/>
+                                </group>
+                            </form>
+                            <tree colors="blue:state == 'draft';gray:state == 'done' " string="期间">
+                                <field name="name"/>
+                                <field name="date_start"/>
+                                <field name="date_stop"/>
+                                <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                                <field name="state"/>
+
+
+                                <button name="close_monthly" type="object" class="oe_highlight"
+                                        attrs="{'invisible': [('state','!=','draft')]}" string="关闭期间"
+                                        groups="base.group_user"/>
+                                <button name="close_monthly" type="object" class="oe_highlight"
+                                        attrs="{'invisible': [('state','=','draft')]}" string="打开期间"
+                                        groups="base.group_user"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_product_monthly_tree" model="ir.ui.view">
+            <field name="name">product.monthly.tree</field>
+            <field name="model">product.monthly</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';gray:state == 'done' " string="年度">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_product_monthly_search" model="ir.ui.view">
+            <field name="name">product.monthly.search</field>
+            <field name="model">product.monthly</field>
+            <field name="arch" type="xml">
+                <search string="过滤器">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
+                           string="年度"/>
+                    <filter string="打开" domain="[('state','=','draft')]" icon="terp-camera_test"/>
+                    <filter string="关闭" domain="[('state','=','done')]" icon="terp-dialog-close"/>
+                    <field name="state"/>
+                    <group expand="0" string="分组">
+                        <filter string="状态" context="{'group_by': 'state'}"
+                                icon="terp-stock_effects-object-colorize"/>
+                        <filter string="公司" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="action_product_monthly" model="ir.actions.act_window">
+            <field name="name">产品月结系统</field>
+            <field name="res_model">product.monthly</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    创建一个客户自动回收计划！
+                </p>
+                <p>
+                    第一步查询年度回收计划如果为空
+                    第二步查询年度下的月回收计划如果还是为空 生成一条错误日期
+
+                    注意这里使用了定时任务来计算，时间最好一天一计算！
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem name="产品月结系统" id="menu_action_product_monthly" parent="prod_config_monthly"
+                  action="action_product_monthly" sequence="10"/>
+
+
+        <record id="view_product_monthly_line_form" model="ir.ui.view">
+            <field name="name">product.monthly.line.form</field>
+            <field name="model">product.monthly.line</field>
+            <field name="arch" type="xml">
+                <form string="产品月结期间">
+                    <header>
+                        <button name="action_draft" states="done" string="重置开放" type="object"/>
+                        <button name="action_done" states="draft" string="关闭" type="object"/>
+                        <field name="state" widget="statusbar" nolabel="1"/>
+                    </header>
+
+
+                    <sheet>
+                        <div class="oe_right oe_button_box" name="buttons">
+
+                            <button class="oe_stat_button"
+                                    name="all_product"
+                                    type="object"
+                                    icon="fa-building-o" string="生成本月产品"
+                                    >
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="fiscalyear_id" widget="selection"/>
+                                <label for="date_start" string="日期期间"/>
+                                <div>
+                                    <field name="date_start" class="oe_inline" nolabel="1"/>
+                                    -
+                                    <field name="date_stop" nolabel="1" class="oe_inline"/>
+                                </div>
+                                <field name="beginning"/>
+                            </group>
+                            <group>
+                                <field name="code"/>
+                                <field name="special"/>
+                                <field name="pool_id" readonly='1'/>
+                                <field name="parent_id" readonly='1'/>
+                                <field name="company_id" widget="selection" groups="base.group_multi_company"
+                                       invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_product_monthly_line_tree" model="ir.ui.view">
+            <field name="name">product.monthly.line.tree</field>
+            <field name="model">product.monthly.line</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';gray:state == 'done' " string="期间">
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_stop"/>
+                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                    <field name="pool_id"/>
+                    <field name="beginning"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_product_monthly_line_search" model="ir.ui.view">
+            <field name="name">product.monthly.line.search</field>
+            <field name="model">product.monthly.line</field>
+            <field name="arch" type="xml">
+                <search string="查询期间">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
+                           string="Period"/>
+                    <filter string="即将关闭" name="draft" domain="[('state','=','draft')]" icon="terp-dialog-close"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_product_monthly_line" model="ir.actions.act_window">
+            <field name="name">产品月结期间</field>
+            <field name="res_model">product.monthly.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_draft': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    创建产品月结
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem name="产品月结期间" id="menu_action_product_monthly_line"
+                  parent="prod_config_monthly"
+                  action="action_product_monthly_line" sequence="11"/>
+
+
+    </data>
+</openerp>

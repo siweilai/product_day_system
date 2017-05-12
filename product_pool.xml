@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_product_pool_form" model="ir.ui.view">
+            <field name="name">product.pool.form</field>
+            <field name="model">product.pool</field>
+            <field name="arch" type="xml">
+                <form string="库位">
+                    <sheet>
+                        <div class="oe_right oe_button_box" name="buttons">
+
+                            <button class="oe_stat_button"
+                                    name="but_company_pool"
+                                    type="object"
+                                    string="自动生成库位"
+                                    icon="fa-building-o">
+                                <div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <group>
+
+
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+
+                                <field name="company_id" widget="selection"/>
+
+                                <field name="warehouse_id" widget="selection"
+                                       domain="[('company_id', '=', company_id)]"/>
+
+                            </group>
+
+                        </group>
+                        <label for="location_ids"/>
+                        <field name="location_ids">
+
+                            <tree string="Idea_list" editable="bottom">
+                                <field name="initial"/>
+                                <field name="location_ids" options="{'no_create': True}"/>
+                            </tree>
+                        </field>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_product_pool_tree" model="ir.ui.view">
+            <field name="name">product.pool.tree</field>
+            <field name="model">product.pool</field>
+            <field name="arch" type="xml">
+                <tree string="库位">
+                    <field name="name"/>
+                    <field name="warehouse_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_pool" model="ir.actions.act_window">
+            <field name="name">产品库位</field>
+            <field name="res_model">product.pool</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    创建产品月结
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem name="产品库位" id="menu_action_product_pool"
+                  parent="odoo8_monthly_system.prod_config_monthly"
+                  action="action_product_pool" sequence="11"/>
+
+
+    </data>
+</openerp>
